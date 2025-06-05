@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../shared/services/auth.service';
 
 // tire os comentarios para utilizar
 
@@ -14,10 +15,11 @@ export class RecuperarSenhaComponent {
   email : string = '';
   modalVerification : boolean = false;
 
-  constructor (private router: Router) {}
+  constructor (private router: Router, private auth: AuthService) {}
 
   openModal() {
     this.modalVerification=true;
+    this.recuperarSenha();
   }
 
   closeModal() {
@@ -25,4 +27,8 @@ export class RecuperarSenhaComponent {
     this.router.navigate(['/login']);
   }
 
+  recuperarSenha() {
+    this.auth.redefinirSenha(this.email)
+    this.email = ''
+  }
 }

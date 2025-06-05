@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { user } from '@angular/fire/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { UserInterface } from '../interfaces/user-interface';
 import { Observable, of, switchMap } from 'rxjs';
-
 
 @Injectable({
   providedIn: 'root'
@@ -14,56 +12,60 @@ export class AuthService {
 
   constructor(private auth: AngularFireAuth, private firestore: AngularFirestore, private router: Router) { }
 
-  cadastro(name: string, email: string, password: string, confirmPassword: string) {
-    if (password !== confirmPassword) {
-      alert('As senhas não conferem');
+  cadastro(name: string, email: string, password: string, confirmPassword: string){
+    if(password !== confirmPassword){
+      alert('As senhas não coincidem.');
       return;
-      
-    } 
-    this.auth.createUserWithEmailAndPassword(email, password).then(async userCredential => {
+    }
+
+    this.auth.createUserWithEmailAndPassword(email, password).then(async userCredential =>{
       const user = userCredential?.user;
 
       if(user){
-        // Import UserInterface from the correct path
-
-        const userData: UserInterface ={
+        const userData: UserInterface = {
           name: name,
           email: email,
           tipo: 'Usuário'
         }
-
+        try {
         await this.salvarDados(user.uid, userData);
-        user.sendEmailVerification();
+        console.log('Usuário cadastrado com sucesso');
+        await user.sendEmailVerification();
         this.auth.signOut();
+        } catch (firestoreError) {
+          console.error('Erro ao salvar dados no Firestore:', firestoreError);
+        }
+      
+      }
+    
+    })
+    .catch(error=>{
+      console.log(error)
+    })
+  }
 
-    }
-  })
-  .catch(error => {
-    console.log(error)
-  })
-}
-salvarDados(id: string, user: UserInterface) {
+  salvarDados(id: string, user: UserInterface){
+    return this.firestore.collection('users').doc(id).set(user);
+  }
 
-  return this.firestore.collection('users').doc(id).set(user)
-
-}
-
-  login(name: string, email: string, password: string) {
-    this.auth.signInWithEmailAndPassword(email, password).then(( userCredential) => {
-      if (userCredential.user?.emailVerified) {
+  login(email:string, password: string){
+    this.auth.signInWithEmailAndPassword(email,password).then((userCredential)=>{
+      if(userCredential.user?.emailVerified){
+        console.log('user logado com sucesso');
         this.router.navigate(['/home']);
       }
-      
     })
-    .catch(error => {
-      console.log(error);
-    });
+    .catch((error)=>{
+      console.log(error)
+    })
   }
+
   redefinirSenha(email: string){
     this.auth.sendPasswordResetEmail(email).then(()=>{ }).catch((error) => {
       console.log(error)
     })
   }
+
   logout(){
     this.auth.signOut().then(()=>{
       this.router.navigate(['/'])
@@ -71,18 +73,16 @@ salvarDados(id: string, user: UserInterface) {
       console.log(error)
     })
   }
+
   getUserData(): Observable<any>{
     return this.auth.authState.pipe(
-      switchMap(user=>{
+      switchMap(user => {
         if(user){
           return this.firestore.collection('users').doc(user.uid).valueChanges();
         } else {
-          return of(null);
+          return of(null)
         }
       })
     )
   }
-  
-
-
 }
