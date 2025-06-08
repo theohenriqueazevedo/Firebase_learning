@@ -26,8 +26,8 @@ export class DatabaseService {
     return this.db.collection(collection, ref => ref.where(field, '==', value)).valueChanges({idField: 'id'});
 
   }
-  updateDocument(collection:string,){
-
+  updateDocument(collection:string, id:string, data:any): Promise<any>{
+    return this.db.collection(collection).doc(id).update(data);
   }
   deleteDocument(collection:string, id:string): Promise<void> {
     return this.db.collection(collection).doc(id).delete();
