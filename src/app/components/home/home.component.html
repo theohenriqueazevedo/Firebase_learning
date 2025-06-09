@@ -38,14 +38,19 @@
 
               <!-- Dropdown (oculto até que seja clicado) -->
               <div class="absolute right-0 mt-2 w-32 bg-white border rounded shadow-lg hidden group-focus-within:block">
-                <ul>
-                  <li>
-                    <button (click)="deleteMovie(movie.id)" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      <i class="fas fa-trash-alt mr-2"></i> Excluir
-                    </button>
-                  </li>
-                </ul>
-              </div>
+                  <ul>
+                    <li>
+                      <button (click)="deleteMovie(movie.id)" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <i class="fas fa-trash-alt mr-2"></i> Excluir
+                      </button>
+                    </li>
+                    <li>
+                      <button (click)="openUpdateModal(movie)"  class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <i class="fas fa-edit mr-2"></i> Editar
+                      </button>
+                    </li>
+                  </ul>
+                </div>
 
             </div>
           </div>
@@ -90,4 +95,38 @@
   <app-footer></app-footer>
 
   <app-add-movie *ngIf="showAddMovieModal" (closeModal)="toggleAddMovieModal()"></app-add-movie>
+
+  <!-- edição de filme -->
+  <div *ngIf="showUpdateMovieModal && selectedMovie" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+    <div class="bg-white text-black rounded-lg shadow-lg w-full max-w-2xl">
+      <div class="px-4 py-3 border-b border-gray-200 flex justify-between items-center">
+        <h5 class="modal-title">Editar Filme</h5>
+        <button class="text-red-600 text-xl" (click)="closeUpdateMovieModal()">&times;</button>
+      </div>
+      <div class="p-4">
+        <form #editForm="ngForm" (ngSubmit)="saveUpdateMovie(selectedMovie)">
+          <div class="mb-4">
+            <label class="block text-sm font-medium">Nome*</label>
+            <input type="text" [(ngModel)]="selectedMovie.name" name="name" class="input-field" required />
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium">Análise*</label>
+            <textarea [(ngModel)]="selectedMovie.analysis" name="analysis" class="input-field" required></textarea>
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium">Nota*</label>
+            <input type="number" min="0" max="5" [(ngModel)]="selectedMovie.rating" name="rating" class="input-field" required />
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium">URL da Imagem</label>
+            <input type="text" [(ngModel)]="selectedMovie.photo_path" name="photo_path" class="input-field" />
+          </div>
+          <div class="flex justify-end border-t border-gray-200 pt-3 space-x-2">
+            <button type="button" class="btn-secondary" (click)="closeUpdateMovieModal()">Cancelar</button>
+            <button type="submit" class="btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
