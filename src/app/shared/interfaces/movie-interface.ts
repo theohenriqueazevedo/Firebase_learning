@@ -4,4 +4,5 @@ export interface MovieInterface {
   rating: number; 
   photo_path: string;
   id: string;
+  favorite?: boolean;
 }

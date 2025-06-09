@@ -18,6 +18,12 @@
           <button type="button" class="add-button" (click)="toggleAddMovieModal()">Adicionar Filme</button>
       </div>
 
+      <div class="flex justify-end mb-4">
+        <a routerLink="/favoritos" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 text-white font-semibold shadow hover:bg-red-600 transition">
+          <i class="fa fa-heart"></i> Meus Favoritos
+        </a>
+      </div>
+
       <div class="cards">
         <button 
           type="button" 
@@ -27,7 +33,13 @@
           &lt;
         </button>
       
-        <div *ngFor="let movie of displayedMovies" class="card group">
+        <div *ngFor="let movie of displayedMovies" class="card group relative bg-white rounded-xl shadow-lg w-80 overflow-hidden transition-transform hover:scale-105">
+          <button class="absolute top-3 left-3 z-10 bg-white rounded-full p-3 shadow-lg border-2 border-gray-200 hover:bg-red-100 hover:border-red-400 transition duration-200 flex items-center justify-center group"
+        (click)="toggleFavorite(movie)"
+        [attr.aria-label]="movie.favorite ? 'Remover dos favoritos' : 'Favoritar'"
+        [title]="movie.favorite ? 'Remover dos favoritos' : 'Favoritar'">
+  <i class="fa text-2xl transition duration-200" [ngClass]="{'fa-heart text-red-500 scale-110 drop-shadow-md': movie.favorite, 'fa-heart-o text-gray-400': !movie.favorite}"></i>
+</button>
           <!-- Icone de tres pontinhos (aparece ao passar o mouse) -->
           <div class="absolute top-2 right-2 hidden group-hover:block">
             <div class="relative">

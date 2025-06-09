@@ -1,0 +1,40 @@
+
+.page {
+  @apply min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 py-10 px-2;
+}
+.card {
+  @apply rounded-2xl shadow-2xl w-80 max-w-full overflow-hidden transition-transform duration-200 hover:scale-105 bg-white relative border-2 border-gray-200 hover:border-blue-400;
+}
+.photo {
+  @apply h-56 flex items-center justify-center bg-gradient-to-tr from-gray-200 to-gray-100;
+}
+.card-content {
+  @apply p-5;
+}
+.card-content h2 {
+  @apply text-2xl font-bold text-gray-900 mb-2;
+}
+.card-content p {
+  @apply text-gray-600 text-base mb-2;
+}
+.rating {
+  @apply flex items-center mb-2;
+}
+.rating .fa-star {
+  @apply text-yellow-400 text-lg mr-1;
+}
+.footer {
+  @apply bg-gray-900 p-2 flex justify-center;
+}
+.favorite-card .fa-heart {
+  @apply text-red-500 text-2xl drop-shadow-md;
+}
+.favorite-card .fa-heart-o {
+  @apply text-gray-400 text-2xl;
+}
+.card .absolute.top-3.right-3 {
+  @apply bg-white rounded-full p-2 shadow hover:bg-red-100 transition z-20;
+}
+.card:hover {
+  box-shadow: 0 8px 32px 0 rgba(31, 41, 55, 0.25);
+}

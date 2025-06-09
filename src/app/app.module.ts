@@ -16,6 +16,7 @@ import { AddMovieComponent } from './shared/components/add-movie/add-movie.compo
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { FavoritosComponent } from './components/favoritos/favoritos.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
     HomeComponent,
     AddMovieComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    FavoritosComponent
   ],
   imports: [
     BrowserModule,

@@ -111,4 +111,19 @@ export class HomeComponent {
     this.showUpdateMovieModal = false;
   }
 
+  toggleFavorite(movie: MovieInterface) {
+    const updatedMovie = { ...movie, favorite: !movie.favorite };
+    this.databaseService.updateDocument('movies', movie.id, updatedMovie)
+      .then(() => {
+        const idx = this.movies.findIndex(m => m.id === movie.id);
+        if (idx !== -1) {
+          this.movies[idx] = updatedMovie;
+          this.displayedMovies = this.movies.slice(this.currentOffset, this.currentOffset + this.limit);
+        }
+      })
+      .catch(error => {
+        console.error('Erro ao favoritar/desfavoritar filme:', error);
+      });
+  }
+
 }
