@@ -1,4 +1,3 @@
-
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatabaseService } from '../../services/database.service';
@@ -11,10 +10,9 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
   styleUrl: './add-movie.component.scss'
 })
 export class AddMovieComponent {
-
   movieForm!: FormGroup;
-  selectedFile: File | null = null; // foto do filme
-  previewUrl: string | null = null; // pré visualização da imagem do filme
+  selectedFile: File | null = null;
+  previewUrl: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -22,7 +20,7 @@ export class AddMovieComponent {
     private storage: AngularFireStorage
   ) {}
 
-   ngOnInit(){
+  ngOnInit() {
     this.movieForm = this.fb.group({
       name: ['', [Validators.required]],
       rating: [0, [Validators.required]],
@@ -31,12 +29,8 @@ export class AddMovieComponent {
     });
   }
 
-
- setRating(rating: number) {
-    // Atualiza o valor de 'rating' no formulário
-    this.movieForm.patchValue({
-      rating: rating
-    });
+  setRating(rating: number) {
+    this.movieForm.patchValue({ rating });
   }
 
   onFileSelected(event: any) {
@@ -50,25 +44,33 @@ export class AddMovieComponent {
     }
   }
 
-  onSubmit(){
-    if(this.movieForm.valid){
+  onSubmit() {
+    if (this.movieForm.valid) {
       const formData = this.movieForm.value;
-
-      this.databaseService.addDocument('movies',formData).then(()=>{
-        console.log('Documento Adicionado!')
-        this.movieForm.reset();
-      }).catch((error)=>{
-        console.log(error)
-      })
+      if (this.selectedFile) {
+        const filePath = `movies/${Date.now()}_${this.selectedFile.name}`;
+        const fileRef = this.storage.ref(filePath);
+        this.storage.upload(filePath, this.selectedFile).then(() => {
+          fileRef.getDownloadURL().subscribe((url) => {
+            formData.photo_path = url;
+            this.databaseService.addDocument('movies', formData).then(() => {
+              this.movieForm.reset();
+              this.selectedFile = null;
+              this.previewUrl = null;
+              this.closeModal.emit();
+            });
+          });
+        });
+      } else {
+        this.databaseService.addDocument('movies', formData).then(() => {
+          this.movieForm.reset();
+          this.closeModal.emit();
+        });
+      }
     }
   }
 
-
-  
-  // variável que emite um evento para o componente da home
   @Output() closeModal = new EventEmitter<void>();
-
-  // Função que emite o evento para o componente da home, fechando o Modal
   onClose() {
     this.closeModal.emit();
   }

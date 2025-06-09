@@ -15,6 +15,7 @@ import { HomeComponent } from './components/home/home.component';
 import { AddMovieComponent } from './shared/components/add-movie/add-movie.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { FooterComponent } from './shared/components/footer/footer.component';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
+    AngularFirestoreModule,
     FormsModule,
     ReactiveFormsModule
   ],
