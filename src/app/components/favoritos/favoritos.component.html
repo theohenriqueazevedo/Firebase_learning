@@ -1,28 +1,36 @@
 <!-- Página de Favoritos -->
 <div class="page min-h-screen bg-gradient-to-b from-gray-00 to-gray-800 py-8">
 <app-header></app-header>
-  <div class="container mx-auto px-4">
-    <h1 class="text-3xl font-bold text-white mb-8 text-center">Meus Favoritos</h1>
-    <div *ngIf="favoriteMovies.length === 0" class="text-center text-gray-300 text-lg mt-16">
+  
+    <div class="container mx-auto px-4">
+        <h1 class="text-3xl font-bold text-white mb-8 text-center">Meus Favoritos</h1>
+        <div *ngIf="favoriteMovies.length === 0" class="text-center text-gray-300 text-lg mt-16">
       Nenhum filme favorito ainda. Marque filmes como favoritos na Home!
+    
     </div>
+    
     <div class="flex flex-wrap justify-center gap-8">
-      <div *ngFor="let movie of favoriteMovies" class="card group relative bg-white rounded-xl shadow-lg w-80 overflow-hidden transition-transform hover:scale-105">
+      
+        <div *ngFor="let movie of favoriteMovies" class="card group relative bg-white rounded-xl shadow-lg w-80 overflow-hidden transition-transform hover:scale-105">
         <button class="absolute top-3 right-3 z-10 bg-white rounded-full p-2 shadow hover:bg-red-100 transition" (click)="toggleFavorite(movie)" [title]="movie.favorite ? 'Remover dos favoritos' : 'Favoritar'">
           <i class="fa" [ngClass]="{'fa-heart text-red-500': movie.favorite, 'fa-heart-o text-gray-400': !movie.favorite}"></i>
         </button>
         <div class="photo h-56 flex items-center justify-center bg-gray-100">
           <img *ngIf="movie.photo_path" [src]="movie.photo_path" alt="Card image" class="object-cover h-full w-full">
           <img *ngIf="!movie.photo_path" src="../../../assets/imgs/terror.jpg" alt="" class="object-cover h-full w-full">
+        
         </div>
+        
         <div class="card-content p-4">
-          <h2 class="text-xl font-semibold text-gray-900 mb-1">{{ movie.name }}</h2>
+          
+            <h2 class="text-xl font-semibold text-gray-900 mb-1">{{ movie.name }}</h2>
           <p class="text-gray-600 text-sm mb-2">{{ movie.analysis }}</p>
           <div class="rating flex items-center mb-2">
             <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
               <i class="fa-star mr-1" [class.fas]="star <= movie.rating" [class.far]="star > movie.rating" [class.text-yellow-400]="star <= movie.rating" [class.text-gray-300]="star > movie.rating"></i>
             </ng-container>
           </div>
+        
         </div>
         <div class="footer bg-gray-900 p-2 flex justify-center">
           <img src="../../../assets/logos/asimoviesWhite.png" alt="logoAsiMovies" class="h-6">
@@ -30,7 +38,7 @@
       </div>
     </div>
     <div class="flex justify-center mt-8">
-      <a routerLink="/" class="text-blue-400 hover:underline">Voltar para Home</a>
+      <a routerLink="/home" class="text-blue-400 hover:underline">Voltar para Home</a>
     </div>
   </div>
   <app-footer></app-footer>
